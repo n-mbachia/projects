@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- div class="container" -->
+        <!-- h1>{% block title %} {% endblock %}</h1 -->
+
+        <!-- Image below posts -->
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="img-fluid mt-4">
+        </div>
+    </div>
+
+    {% for post in posts %}
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <a href="{{ url_for('post', post_id=post['id']) }}">
+                <h2>{{ post['title'] }}</h2>
+            </a>
+            <span class="badge badge-primary">{{ post['created'] }}</span>
+            <a href="{{ url_for('edit', id=post['id']) }}">
+                <span class="badge badge-warning">Edit</span>
+            </a>
+            <hr>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- /div -->
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+{% endblock %}

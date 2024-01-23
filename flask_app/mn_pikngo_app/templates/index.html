@@ -1,0 +1,23 @@
+<!-- templates/index.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="img-fluid mt-4">
+        </div>
+    </div>
+{% endblock %}
+
+
+<body>
+    <h1>Welcome to the Frontend</h1>
+
+    {% for content in contents %}
+        <h2>{{ content[1] }}</h2>
+        <p>{{ content[2] }}</p>
+    {% endfor %}
+</body>
+</html>

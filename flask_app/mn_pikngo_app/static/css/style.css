@@ -1,0 +1,30 @@
+/* style.css */
+@font-face {
+    font-family: 'BerkshireSwash';
+    src: url('../fonts/BerkshireSwash-Regular.woff2') format('woff2'),
+         url('../fonts/BerkshireSwash-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'BerkshireSwash', cursive;
+}
+
+/* Change the font for specific elements, e.g., h1, p */
+h1, p {
+    font-family: 'BerkshireSwash', cursive;
+}
+
+h1, h2, h3, h4 {
+    color: green;
+    text-align: center;
+    padding: 1px;
+}
+
+/* Define a class for styling the footer */
+.footer {
+    font-family: 'Berkshire Swash', cursive; /* Use your desired font */
+    font-size: 16px; /* Adjust the font size as needed */
+    color: #333; /* Set the text color */
+}

@@ -1,0 +1,29 @@
+<!-- templates/admin_dashboard.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Admin Dashboard - My Flask App
+{% endblock %}
+
+{% block content %}
+    <h1>Admin Dashboard</h1>
+
+    <form method="post" action="{{ url_for('admin_dashboard') }}">
+        {{ form.hidden_tag() }}
+        <label for="title">Title:</label>
+        {{ form.title() }}
+        <br>
+        <label for="body">Content:</label>
+        {{ form.body() }}
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Existing Content:</h2>
+    {% for content in contents %}
+        <h3>{{ content[1] }}</h3>
+        <p>{{ content[2] }}</p>
+    {% endfor %}
+{% endblock %}
+
