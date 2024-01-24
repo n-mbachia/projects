@@ -9,14 +9,20 @@
             <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="img-fluid mt-4">
         </div>
     </div>
-{% endblock %}
 
-<body>
-    <h1>Welcome to the Frontend</h1>
+    <h1>Outside Upendo Butcher opposite the main bus stop</h1>
 
     {% for content in contents %}
-        <h2>{{ content[1] }}</h2>
-        <p>{{ content[2] }}</p>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ content[1] }}</h5>
+                <p class="card-text">{{ content[2] }}</p>
+            </div>
+        </div>    
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+{% endblock %}
