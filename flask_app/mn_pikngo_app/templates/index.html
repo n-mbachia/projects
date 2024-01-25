@@ -4,23 +4,33 @@
 
 {% block content %}
     <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="img-fluid mt-4">
-        </div>
-    </div>
-
-    <h1>Outside Upendo Butcher opposite the main bus stop</h1>
-
-    {% for content in contents %}
-        <div class="card mt-4">
-            <div class="card-body">
-                <h5 class="card-title">{{ content[1] }}</h5>
-                <p class="card-text">{{ content[2] }}</p>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="img-fluid mt-4">
             </div>
-        </div>    
-    {% endfor %}
+        </div>
+    
+        <!-- Link to Google Maps with the provided link -->
+        <p><a href="https://maps.app.goo.gl/gyJcoCQocDPtyJ126" target="_blank">View on Google Maps</a></p>
+        
+        <div class="container">
+            <h1>Latest Posts</h1>
+            <ul>
+                {% for post in latest_posts %}
+                    <li class="list-unstyled text-center">
+                        <a href="{{ url_for('post', post_id=post[0]) }}">{{ post[1] }}</a>
+                        <span class="text-muted">{{ post[3] }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
+        <!-- div class="container text">
+            <h2></h2>
+            <a href="{{ url_for('earlier_posts') }}">View All Posts</a>
+        </div -->
+
+    </div>
 {% endblock %}
 
 {% block footer %}

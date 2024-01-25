@@ -1,0 +1,19 @@
+<!-- templates/earlier_posts.html -->
+
+{% extends 'base.html' %}
+<div>
+    {% block content %}
+        <div class="container">
+            <h1>All Posts</h1>
+            <ul>
+                {% for post in posts %}
+                    <li>
+                        <a href="{{ url_for('post', post_id=post[0]) }}">{{ post[1] }}</a>
+                        <span class="text-muted">{{ post[3] }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endblock %}
+    
+</div>

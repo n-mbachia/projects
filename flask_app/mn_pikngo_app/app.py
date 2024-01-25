@@ -1,8 +1,6 @@
 #usr/bin/python3 
 
-# app.py
-
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash, g
 import sqlite3
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
@@ -10,13 +8,13 @@ from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['DATABASE'] = 'site.db'
 
-# Initialize SQLite database
-DATABASE = 'site.db'
+# Dummy admin user (for demonstration purposes only)
+admin_user = {'username': 'admin', 'password': 'password'}
 
-# Create a table for content
 def create_content_table():
-    conn = sqlite3.connect(DATABASE)
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS content (
@@ -26,11 +24,9 @@ def create_content_table():
         )
     ''')
     conn.commit()
-    conn.close()
 
-# Create a table for the admin user (dummy for this example)
 def create_admin_table():
-    conn = sqlite3.connect(DATABASE)
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS admin (
@@ -40,30 +36,23 @@ def create_admin_table():
         )
     ''')
     conn.commit()
-    conn.close()
 
-create_content_table()
-create_admin_table()
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(app.config['DATABASE'])
+        g.db.row_factory = sqlite3.Row
+    return g.db
 
-# Example Form for Content Creation
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'db'):
+        g.db.close()
+
 class ContentForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     body = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-# Dummy admin user for demonstration
-admin_user = {'username': 'admin', 'password': 'password'}
-
-@app.route('/')
-def index():
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM content')
-    contents = cursor.fetchall()
-    conn.close()
-    return render_template('index.html', contents=contents)
-
-# Admin login route
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -79,7 +68,6 @@ def admin_login():
 
     return render_template('admin_login.html')
 
-# Admin dashboard route for content creation
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
     if not session.get('admin_logged_in'):
@@ -91,22 +79,87 @@ def admin_dashboard():
         title = form.title.data
         body = form.body.data
 
-        conn = sqlite3.connect(DATABASE)
+        conn = get_db()
         cursor = conn.cursor()
         cursor.execute('INSERT INTO content (title, body) VALUES (?, ?)', (title, body))
         conn.commit()
-        conn.close()
 
         flash('Content added successfully', 'success')
         return redirect(url_for('admin_dashboard'))
 
-    conn = sqlite3.connect(DATABASE)
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM content')
     contents = cursor.fetchall()
-    conn.close()
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
 
+@app.route('/')
+def index():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM content ORDER BY id DESC')
+    posts = cursor.fetchall()
+
+    latest_posts = posts[:2]
+    older_posts = posts[2:]
+
+    return render_template('index.html', latest_posts=latest_posts, older_posts=older_posts)
+
+@app.route('/admin/edit_content/<int:content_id>', methods=['GET', 'POST'])
+def edit_content(content_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+
+    form = ContentForm()
+
+    if form.validate_on_submit():
+        title = form.title.data
+        body = form.body.data
+
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE content SET title=?, body=? WHERE id=?', (title, body, content_id))
+        conn.commit()
+
+        flash('Content updated successfully', 'success')
+        return redirect(url_for('admin_dashboard'))
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM content WHERE id=?', (content_id,))
+    content = cursor.fetchone()
+
+    if content:
+        form.title.data = content[1]
+        form.body.data = content[2]
+        return render_template('edit_content.html', form=form, content_id=content_id)
+    else:
+        flash('Content not found', 'danger')
+        return redirect(url_for('admin_dashboard'))
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM content WHERE id = ?', (post_id,))
+    post = cursor.fetchone()
+
+    if post:
+        return render_template('post.html', post=post)
+    else:
+        flash('Post not found', 'danger')
+        return redirect(url_for('index'))
+
+@app.route('/earlier_posts')
+def earlier_posts():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM content ORDER BY id DESC')
+    posts = cursor.fetchall()
+
+    return render_template('earlier_posts.html', posts=posts)
+
 if __name__ == '__main__':
     app.run(debug=True)
+
