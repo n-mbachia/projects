@@ -15,6 +15,7 @@
 
     <title>{% block title %} {% endblock %}</title>
   </head>
+  
   <body class="d-flex flex-column min-vh-100"> <!-- Change min-hv-100 to min-vh-100 -->
     <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a class="navbar-brand" href="{{ url_for('index')}}">
@@ -44,15 +45,24 @@
     {% endblock %}
 
     {% block footer %}
-        <footer class="footer mt-auto py-3 bg-light">
-            <div class="container text-center">
-                <span class="text-muted"> <p>&copy; 2024 All rights reserved. A brand owned and operated by</span>
-                <!-- Add a centred-image to the footer -->
-                <div class="d-flex justify-content-center">
-                  <img src="{{ url_for('static', filename='mn_footer.jpg') }}" alt="Footer Image" class="img-fluid mt-4" style="max-width: 100%; max-height: 50px;">
-                </div>
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <div class="d-flex justify-content-start align-items-center">
+                <!-- Clickable image link to Google Maps -->
+                <a href="https://maps.app.goo.gl/gyJcoCQocDPtyJ126" target="_blank">
+                    <img src="{{ url_for('static', filename='pin_image.png') }}" alt="Google Maps Pin" class="google-maps-pin" style="width: 30px; height: auto;">
+                </a>
+                <!-- Location link -->
+                <a href="https://maps.app.goo.gl/gyJcoCQocDPtyJ126" target="_blank" class="ml-2"></a>
             </div>
-        </footer>
+            <!-- Your existing content -->
+            <span class="text-muted"> <p>&copy; 2024 All rights reserved. A brand owned and operated by</span>
+            <!-- Add a centred-image to the footer -->
+            <div class="d-flex justify-content-center">
+                <img src="{{ url_for('static', filename='mn_footer.jpg') }}" alt="Footer Image" class="img-fluid mt-4" style="max-width: 100%; max-height: 50px;">
+            </div>
+        </div>
+    </footer>
     {% endblock %}
 
     <!-- Optional JavaScript -->
