@@ -1,6 +1,6 @@
 #!/usr/bin/python3 
 
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash, g
 import sqlite3
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
