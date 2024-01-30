@@ -1,53 +1,30 @@
-#!/usr/bin/python3 
+# app.py
 
 from flask import Flask, render_template, redirect, url_for, request, session, flash, g
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['DATABASE'] = 'site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Turn off Flask-SQLAlchemy event tracking
+
+db = SQLAlchemy(app)
 
 # Dummy admin user (for demonstration purposes only)
 admin_user = {'username': 'admin', 'password': 'password'}
 
-def create_content_table():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS content (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            body TEXT NOT NULL
-        )
-    ''')
-    conn.commit()
+# Content model
+class Content(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-def create_admin_table():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS admin (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL
-        )
-    ''')
-    conn.commit()
-
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(app.config['DATABASE'])
-        g.db.row_factory = sqlite3.Row
-    return g.db
-
-@app.teardown_appcontext
-def close_db(error):
-    if hasattr(g, 'db'):
-        g.db.close()
-
+# Example Form for Content Creation
 class ContentForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     body = TextAreaField('Content', validators=[DataRequired()])
@@ -79,30 +56,21 @@ def admin_dashboard():
         title = form.title.data
         body = form.body.data
 
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO content (title, body) VALUES (?, ?)', (title, body))
-        conn.commit()
+        new_content = Content(title=title, body=body)
+        db.session.add(new_content)
+        db.session.commit()
 
         flash('Content added successfully', 'success')
         return redirect(url_for('admin_dashboard'))
 
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM content')
-    contents = cursor.fetchall()
+    contents = Content.query.all()
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
 
 @app.route('/')
 def index():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM content ORDER BY id DESC')
-    posts = cursor.fetchall()
-
-    latest_posts = posts[:2]
-    older_posts = posts[2:]
+    latest_posts = Content.query.order_by(Content.created_at.desc()).limit(2).all()
+    older_posts = Content.query.order_by(Content.created_at.desc()).offset(2).all()
 
     return render_template('index.html', latest_posts=latest_posts, older_posts=older_posts)
 
@@ -113,26 +81,20 @@ def edit_content(content_id):
 
     form = ContentForm()
 
-    if form.validate_on_submit():
-        title = form.title.data
-        body = form.body.data
+    content = Content.query.get(content_id)
 
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('UPDATE content SET title=?, body=? WHERE id=?', (title, body, content_id))
-        conn.commit()
+    if form.validate_on_submit():
+        content.title = form.title.data
+        content.body = form.body.data
+
+        db.session.commit()
 
         flash('Content updated successfully', 'success')
         return redirect(url_for('admin_dashboard'))
 
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM content WHERE id=?', (content_id,))
-    content = cursor.fetchone()
-
     if content:
-        form.title.data = content[1]
-        form.body.data = content[2]
+        form.title.data = content.title
+        form.body.data = content.body
         return render_template('edit_content.html', form=form, content_id=content_id)
     else:
         flash('Content not found', 'danger')
@@ -140,10 +102,7 @@ def edit_content(content_id):
 
 @app.route('/post/<int:post_id>')
 def post(post_id):
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM content WHERE id = ?', (post_id,))
-    post = cursor.fetchone()
+    post = Content.query.get(post_id)
 
     if post:
         return render_template('post.html', post=post)
@@ -153,13 +112,11 @@ def post(post_id):
 
 @app.route('/earlier_posts')
 def earlier_posts():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM content ORDER BY id DESC')
-    posts = cursor.fetchall()
+    posts = Content.query.order_by(Content.created_at.desc()).all()
 
     return render_template('earlier_posts.html', posts=posts)
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()    
     app.run(debug=True)
-
