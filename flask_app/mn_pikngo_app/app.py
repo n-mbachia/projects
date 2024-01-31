@@ -1,6 +1,6 @@
 # app.py
 
-from flask import Flask, render_template, redirect, url_for, request, session, flash, g
+from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
@@ -30,6 +30,12 @@ class ContentForm(FlaskForm):
     body = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+# Initialize the database
+def init_db():
+    with app.app_context():
+        db.create_all()
+
+# Admin login route
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -45,6 +51,7 @@ def admin_login():
 
     return render_template('admin_login.html')
 
+# Admin dashboard route for content creation
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
     if not session.get('admin_logged_in'):
@@ -67,6 +74,7 @@ def admin_dashboard():
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
 
+# Index route
 @app.route('/')
 def index():
     latest_posts = Content.query.order_by(Content.created_at.desc()).limit(2).all()
@@ -74,6 +82,7 @@ def index():
 
     return render_template('index.html', latest_posts=latest_posts, older_posts=older_posts)
 
+# Edit content route
 @app.route('/admin/edit_content/<int:content_id>', methods=['GET', 'POST'])
 def edit_content(content_id):
     if not session.get('admin_logged_in'):
@@ -100,6 +109,7 @@ def edit_content(content_id):
         flash('Content not found', 'danger')
         return redirect(url_for('admin_dashboard'))
 
+# Single post route
 @app.route('/post/<int:post_id>')
 def post(post_id):
     post = Content.query.get(post_id)
@@ -110,6 +120,7 @@ def post(post_id):
         flash('Post not found', 'danger')
         return redirect(url_for('index'))
 
+# Earlier posts route
 @app.route('/earlier_posts')
 def earlier_posts():
     posts = Content.query.order_by(Content.created_at.desc()).all()
@@ -117,8 +128,7 @@ def earlier_posts():
     return render_template('earlier_posts.html', posts=posts)
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()    
+    init_db()
     app.run(debug=True)
 """
 # Admin Signup Logic and form
