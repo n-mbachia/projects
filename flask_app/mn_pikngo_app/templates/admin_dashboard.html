@@ -27,9 +27,9 @@
         {% for content in contents %}
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">{{ content[1] }}</h3>
-                    <!-- p class="card-text">{{ content[2] }}</p -->
-                    <a href="{{ url_for('edit_content', content_id=content[0]) }}" class="btn btn-warning">Edit</a>
+                    <h3 class="card-title">{{ content.title }}</h3>
+                    <!-- p class="card-text">{{ content.body }}</p -->
+                    <a href="{{ url_for('edit_content', content_id=content.id) }}" class="btn btn-warning">Edit</a>
                 </div>
             </div>
             <br>

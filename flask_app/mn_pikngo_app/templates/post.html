@@ -5,8 +5,32 @@
 {% block content %}
     <div class="container">
         <h1>{{ post.title }}</h1>
+        <p style="font-size: smaller; color: #888;">Date Posted: {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
         <p>{{ post.body }}</p>
-        <p>Date Posted: {{ post.date_posted }}</p>
-        <a href="{{ url_for('index') }}">Back to Home</a>
+        <button onclick="scrollToTop()" id="scrollToTopBtn" style="display: none; background-color: {{ post.created_at.strftime('#%m%d%H%M') }}; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Return Home</button>
     </div>
+
+    <script>
+        // Get the button
+        var mybutton = document.getElementById("scrollToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function scrollToTop() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+        }
+    </script>
 {% endblock %}

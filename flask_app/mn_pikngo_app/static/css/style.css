@@ -11,6 +11,11 @@ body {
     font-family: 'BerkshireSwash', cursive;
 }
 
+.index img{
+    margin-right: 0.2em;
+    width: 150px;
+}
+
 /* Change the font for specific elements, e.g., h1, p */
 h1, p, h2, p, h3,p {
     font-family: 'BerkshireSwash', cursive;
