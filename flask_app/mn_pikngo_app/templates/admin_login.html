@@ -5,14 +5,16 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <h1>Admin Login</h1>
+    <h1 style="text-align: center;">Admin Login</h1>
 
-    <form method="post" action="{{ url_for('admin_login') }}">
+    <form method="post" action="{{ url_for('admin_login') }}" style="text-align: center;">
         <label for="username">Username:</label>
-        <input type="text" name="username" required>
+        <br>
+        <input type="text" name="username" required placeholder="Enter your username" style="background-color: smoke;">
         <br>
         <label for="password">Password:</label>
-        <input type="password" name="password" required>
+        <br>
+        <input type="password" name="password" required placeholder="Enter your password" style="background-color: smoke;">
         <br>
         <input type="submit" value="Login">
     </form>
