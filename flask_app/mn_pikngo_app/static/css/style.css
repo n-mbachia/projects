@@ -11,25 +11,26 @@ body {
     font-family: 'BerkshireSwash', cursive;
 }
 
-.index img{
-    margin-right: 0.2em;
-    width: 150px;
+.static img {
+    margin-left: 0.5em;
+    width: 450px;
 }
 
-/* Change the font for specific elements, e.g., h1, p */
-h1, p, h2, p, h3,p {
+/* Change the font for specific elements */
+h1, h2, h3, h4, p {
     font-family: 'BerkshireSwash', cursive;
-}
-
-h1, h2, h3, h4 {
     color: green;
     text-align: center;
     padding: 1px;
 }
 
+.small {
+    font-size: 12px; /* Adjust the font size as needed */
+}
+
 /* Define a class for styling the footer */
 footer {
-    font-family: 'Berkshire Swash', cursive; /* Use your desired font */
-    font-size: 16px; /* Adjust the font size as needed */
-    color: #333; /* Set the text color */
+    font-family: 'Berkshire Swash', cursive;
+    font-size: 16px;
+    color: #333;
 }

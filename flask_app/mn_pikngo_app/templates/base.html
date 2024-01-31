@@ -34,14 +34,6 @@
                 </li>
             </ul>
         </div>
-        <!-- Collapsible content -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('earlier_posts') }}">View All Posts</a>
-                </li>
-            </ul>
-        </div>
     </nav>
 
     {% block content %} 
@@ -52,26 +44,23 @@
     </div>
     {% endblock %}
 
+    <!-- Button to return home if necessary -->
+   
     {% block footer %}
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container text-center">
-            <div class="d-flex justify-content-start align-items-center">
-                <!-- Clickable image link to Google Maps -->
-                <a href="https://maps.app.goo.gl/gyJcoCQocDPtyJ126" target="_blank">
-                    <img src="{{ url_for('static', filename='pin_image.png') }}" alt="Google Maps Pin" class="google-maps-pin" style="width: 30px; height: auto;">
-                </a>
-                <!-- Location link -->
-                <a href="https://maps.app.goo.gl/gyJcoCQocDPtyJ126" target="_blank" class="ml-2"></a>
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container text-center">
+                 <div class="mt-3">
+                    <span class="text-muted">&copy; 2024 All rights reserved. A brand owned and operated by</span>
+                </div>
+
+                <!-- Add a centered image to the footer -->
+                <div class="mt-3">
+                    <img src="{{ url_for('static', filename='mn_footer.jpg') }}" alt="Footer Image" class="img-fluid" style="max-width: 70%; max-height: 50px;">
+                </div>
             </div>
-            <!-- Your existing content -->
-            <span class="text-muted"> <p>&copy; 2024 All rights reserved. A brand owned and operated by</span>
-            <!-- Add a centred-image to the footer -->
-            <div class="d-flex justify-content-center">
-                <img src="{{ url_for('static', filename='mn_footer.jpg') }}" alt="Footer Image" class="img-fluid mt-4" style="max-width: 100%; max-height: 50px;">
-            </div>
-        </div>
-    </footer>
+        </footer>
     {% endblock %}
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
