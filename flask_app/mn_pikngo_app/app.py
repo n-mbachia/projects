@@ -130,3 +130,79 @@ def earlier_posts():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+"""
+# Admin Signup Logic and form
+from app import db
+from werkzeug.security import generate_password_hash
+
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, ValidationError
+from wtforms.validators import DataRequired, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, ValidationError, TextAreaField, IntegerField, FileField, RadioField, BooleanField
+
+class AdminSignupForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
+    verification_code = StringField('Verification Code', validators=[DataRequired()])
+    submit = SubmitField('Sign Up')
+
+    def validate_verification_code(self, field):
+        if field.data != '123456':  # Replace '123456' with your actual verification code
+            raise ValidationError('Invalid verification code')
+
+
+# class AdminUser(db.Model):
+#     extend_existing=True
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(255), unique=True, nullable=False)
+#     password = db.Column(db.String(255), nullable=False)
+
+#     def __repr__(self):
+#         return f"AdminUser(username='{self.username}')"
+
+
+# # Admin Signup
+# class AdminSignupForm(FlaskForm):
+#     username = StringField('Username', validators=[DataRequired()])
+#     password = PasswordField('Password', validators=[DataRequired()])
+#     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
+#     verification_code = StringField('Verification Code', validators=[DataRequired()])
+#     submit = SubmitField('Sign Up')
+
+#     def validate_verification_code(self, field):
+#         if field.data != '123456':  # Replace '123456' with your actual verification code
+#             raise ValidationError('Invalid verification code')
+
+# @app.route('/admin/signup', methods=['GET', 'POST'])
+# def admin_signup():
+#     form = AdminSignupForm()
+
+#     if form.validate_on_submit():
+#         username = form.username.data
+#         password = form.password.data
+#         confirm_password = form.confirm_password.data
+#         verification_code = form.verification_code.data
+
+#         # Check if the verification code is valid
+#         if verification_code != '123456':  # Replace '123456' with your actual verification code
+#             flash('Invalid verification code', 'danger')
+#             return redirect(url_for('admin_signup'))
+
+#         # Check if the password and confirm_password match
+#         if password != confirm_password:
+#             flash('Passwords do not match', 'danger')
+#         else:
+#             # Save the admin user to the database or perform any other necessary actions
+#             hashed_password = generate_password_hash(password, method='sha256')
+#             admin_user = AdminUser(username=username, password=hashed_password)
+#             db.session.add(admin_user)
+#             db.session.commit()
+            
+#             flash('Admin user created successfully', 'success')
+#             return redirect(url_for('admin_login'))
+
+#     return render_template('admin_signup.html', form=form)
+
+
+"""

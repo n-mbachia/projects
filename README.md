@@ -1,1 +1,139 @@
 # Projects
+
+## Pick 'n Go Project
+
+This is a project focused on building a simple blog for the Pick 'n Go brand system, using Flask and Django.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Introduction
+
+This is a project focused on building a simple blog for the Pick 'n Go brand system, using Flask and Django.
+
+## Features
+
+## Features
+
+- Admin panel for managing blog content
+- Authentication system for user registration and login
+- CRUD operations for creating, reading, updating, and deleting articles
+- Client page for reading articles
+
+## Installation
+
+## Installation
+
+To install the project and its dependencies, follow these steps:
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/n-mbachia/project.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```bash
+    cd project
+    ```
+
+3. Create a virtual environment:
+
+    ```bash
+    python3 -m virtualenv .venv
+    ```
+
+4. Activate the virtual environment:
+
+    - For Windows:
+
+      ```bash
+      source .venv\Scripts\activate
+      ```
+
+    - For macOS and Linux:
+
+      ```bash
+      source .venv/bin/activate
+      ```
+
+5. Install the required dependencies:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+6. Set up the database:
+
+    ```bash
+    flask db init
+    flask db migrate
+    flask db upgrade
+    ```
+
+7. Start the development server:
+
+    ```bash
+    flask run
+    ```
+
+8. Open your web browser and visit `http://localhost:5000` to access the application.
+
+## Usage
+
+To use the Flask blog app, follow these steps:
+
+<!-- 
+1. Step 1
+2. Step 2
+3. Step 3 
+-->
+
+### Use Cases
+
+Here are some examples of how you can use the Flask blog app:
+
+<!-- 
+1. Use case 1
+2. Use case 2
+3. Use case 3 
+-->
+
+### Standard Blog Operations
+
+To perform standard blog operations such as creating, updating, and deleting articles, follow these steps:
+<!-- 
+1. Step 1
+2. Step 2
+3. Step 3 
+-->
+
+
+## Contributing
+
+## Contributing
+
+We welcome contributions to the project! To contribute, please follow these steps:
+
+1. Fork the repository on GitHub.
+2. Clone your forked repository to your local machine.
+3. Create a new branch for your changes.
+4. Make your desired changes to the codebase.
+5. Commit your changes with descriptive commit messages.
+6. Push your changes to your forked repository.
+7. Submit a pull request to the main repository.
+
+Please ensure that your contributions adhere to our [code of conduct](CODE_OF_CONDUCT.md).
+
+We appreciate your contributions and will review them as soon as possible.
+
+## License
+
+Specify the license under which the project is distributed.
