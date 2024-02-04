@@ -19,7 +19,7 @@ body {
 /* Change the font for specific elements */
 h1, h2, h3, h4, p {
     font-family: 'BerkshireSwash', cursive;
-    color: green;
+    color: yellowgreen;
     text-align: center;
     padding: 1px;
 }

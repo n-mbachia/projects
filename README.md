@@ -2,7 +2,7 @@
 
 ## Pick 'n Go Project
 
-This is a project focused on building a simple blog for the Pick 'n Go brand system, using Flask and Django.
+This is a project focused on building a simple blog for the Pik 'n Go brand system, using Flask on version 1.0 and then build a version 1.2 on Django. The project is starting with a simple blog post to enhance content creation while focusing to build an entire ecommerce site where clients can place their orders online for delivery while also requesting other services that will be offered. 
 
 ## Table of Contents
 
@@ -15,8 +15,14 @@ This is a project focused on building a simple blog for the Pick 'n Go brand sys
 
 ## Introduction
 
-This is a project focused on building a simple blog for the Pick 'n Go brand system, using Flask and Django.
-
+This is a project focused on building a simple blog for the Pik 'n Go brand system, using Flask and Django.
+The initial blog will have articles about the following;
+    - about the organization,
+    - benefits of sugracane juice,
+    - benefits of eating nuts, 
+    - the cooking pastes we make, 
+    - peanut butter and other canned foods, 
+The blog post will also feature other content creators who are willing to write articles that can be posted on this site for clients and other enthusiasts to read them here in.
 ## Features
 
 ## Features
@@ -25,6 +31,7 @@ This is a project focused on building a simple blog for the Pick 'n Go brand sys
 - Authentication system for user registration and login
 - CRUD operations for creating, reading, updating, and deleting articles
 - Client page for reading articles
+- About us page to give imformation on the organization.
 
 ## Installation
 
