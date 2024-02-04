@@ -24,15 +24,18 @@
         </form>
 
         <h2>Existing Content:</h2>
+        
         {% for content in contents %}
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body">
                     <h3 class="card-title">{{ content.title }}</h3>
-                    <!-- p class="card-text">{{ content.body }}</p -->
+                    <p class="card-text">{{ content.body }}</p>
+                    {% if content.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + content.image_filename) }}" alt="Post Image" class="img-fluid mb-2">
+                    {% endif %}
                     <a href="{{ url_for('edit_content', content_id=content.id) }}" class="btn btn-warning">Edit</a>
                 </div>
             </div>
-            <br>
         {% endfor %}
     </div>
 {% endblock %}

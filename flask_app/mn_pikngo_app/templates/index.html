@@ -4,19 +4,19 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="static rounded">
-                <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="rounded">
+        <div class="row justify-content-center align-items-center">
+            <div class="static rounded text-center">
+                <img src="{{ url_for('static', filename='pik_n_go_goods.png') }}" alt="Image Caption" class="rounded img-fluid">
             </div>
         </div>
-
-        <div class="container">
-            <h1>New Posts</h1>
+        
+        <div class="container text-center mt-3">
+            <h1>Latest Posts</h1>
             <ul>
                 {% for post in latest_posts %}
-                    <li class="list-unstyled text-center">
+                    <li class="list-unstyled">
                         <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
-                        <span class="text-muted small">{{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                        <span class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
                     </li>
                 {% endfor %}
             </ul>

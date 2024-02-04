@@ -3,16 +3,23 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
+from werkzeug.utils import secure_filename
 from datetime import datetime
+import os
+import secrets
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Turn off Flask-SQLAlchemy event tracking
+app.config['UPLOAD_FOLDER'] = 'path/to/your/upload/folder'
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Dummy admin user (for demonstration purposes only)
 admin_user = {'username': 'admin', 'password': 'password'}
@@ -22,12 +29,14 @@ class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     body = db.Column(db.Text, nullable=False)
+    image_filename = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Example Form for Content Creation
 class ContentForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     body = TextAreaField('Content', validators=[DataRequired()])
+    image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif']), FileSize(max_size=2 * 1024 * 1024)])  # 2 MB limit
     submit = SubmitField('Submit')
 
 # Initialize the database
@@ -62,8 +71,16 @@ def admin_dashboard():
     if form.validate_on_submit():
         title = form.title.data
         body = form.body.data
+        
+        # Handle image upload
+        image = form.image.data
+        if image:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            filename = None
 
-        new_content = Content(title=title, body=body)
+        new_content = Content(title=title, body=body, image_filename=filename)
         db.session.add(new_content)
         db.session.commit()
 
@@ -130,6 +147,7 @@ def earlier_posts():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+
 """
 # Admin Signup Logic and form
 from app import db

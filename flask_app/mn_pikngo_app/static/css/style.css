@@ -11,9 +11,21 @@ body {
     font-family: 'BerkshireSwash', cursive;
 }
 
+.static {
+    margin: 2em auto; /* Center the .static element */
+}
+
 .static img {
-    margin-left: 0.5em;
-    width: 450px;
+    width: 100%; /* Make the image fill the width of its container */
+    max-width: 450px; /* Set a maximum width for the image */
+    height: auto; /* Maintain the aspect ratio */
+    display: block; /* Remove any default inline styles */
+    margin: 0 auto; /* Center the image */
+}
+
+/* Additional styling for the list items */
+.list-unstyled {
+    margin-top: 10px;
 }
 
 /* Change the font for specific elements */
@@ -24,13 +36,13 @@ h1, h2, h3, h4, p {
     padding: 1px;
 }
 
-.small {
-    font-size: 12px; /* Adjust the font size as needed */
-}
+/* .small {
+    font-size: 12px; /* Adjust the font size as needed 
+}  */
 
 /* Define a class for styling the footer */
 footer {
-    font-family: 'Berkshire Swash', cursive;
+    font-family: 'BerkshireSwash', cursive;
     font-size: 16px;
-    color: #333;
+    color: black;
 }
