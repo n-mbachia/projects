@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Turn off Flask-SQLAlchemy event tracking
-app.config['UPLOAD_FOLDER'] = 'path/to/your/upload/folder'
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  # Set the UPLOAD_FOLDER to static/uploads'path/to/your/upload/folder'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -99,19 +99,25 @@ def index():
 
     return render_template('index.html', latest_posts=latest_posts, older_posts=older_posts)
 
-# Edit content route
+# Admin dashboard route for content creation
 @app.route('/admin/edit_content/<int:content_id>', methods=['GET', 'POST'])
 def edit_content(content_id):
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin_login'))
 
     form = ContentForm()
-
     content = Content.query.get(content_id)
 
     if form.validate_on_submit():
         content.title = form.title.data
         content.body = form.body.data
+
+        # Handle image upload
+        image = form.image.data
+        if image:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            content.image_filename = filename
 
         db.session.commit()
 

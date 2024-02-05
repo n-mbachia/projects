@@ -1,4 +1,6 @@
 /* style.css */
+
+/* Font-face for BerkshireSwash */
 @font-face {
     font-family: 'BerkshireSwash';
     src: url('../fonts/BerkshireSwash-Regular.woff2') format('woff2'),
@@ -7,20 +9,23 @@
     font-style: normal;
 }
 
+/* Body styling */
 body {
     font-family: 'BerkshireSwash', cursive;
 }
 
+/* Center the .static element */
 .static {
-    margin: 2em auto; /* Center the .static element */
+    margin: 2em auto;
 }
 
+/* Image styling within .static */
 .static img {
-    width: 100%; /* Make the image fill the width of its container */
-    max-width: 450px; /* Set a maximum width for the image */
-    height: auto; /* Maintain the aspect ratio */
-    display: block; /* Remove any default inline styles */
-    margin: 0 auto; /* Center the image */
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 /* Additional styling for the list items */
@@ -28,17 +33,24 @@ body {
     margin-top: 10px;
 }
 
-/* Change the font for specific elements */
+/* Additional styling for the layout */
+.post-content {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* Styling for the image container */
+.image-container {
+    margin-right: 20px;
+}
+
+/* Change the font and color for specific elements */
 h1, h2, h3, h4, p {
     font-family: 'BerkshireSwash', cursive;
     color: yellowgreen;
     text-align: center;
     padding: 1px;
 }
-
-/* .small {
-    font-size: 12px; /* Adjust the font size as needed 
-}  */
 
 /* Define a class for styling the footer */
 footer {
