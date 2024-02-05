@@ -7,7 +7,7 @@
         <div class="post-content">
             {% if post.image_filename %}
                 <div class="image-container">
-                    <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="img-fluid">
+                    <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="img-fluid rounded">
                 </div>
             {% endif %}
             
@@ -21,6 +21,6 @@
         <button onclick="scrollToTop()" id="scrollToTopBtn" style="display: none; background-color: {{ post.created_at.strftime('#%m%d%H%M') }}; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Return Home</button>
     </div>
     <script>
-        // ... (scroll to top JavaScript remains unchanged)
+        //scroll to top JavaScript remains unchanged)
     </script>
 {% endblock %}
