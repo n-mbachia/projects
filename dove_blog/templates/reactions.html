@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Reactions</title>
+</head>
+<body>
+    <h1>Post Reactions</h1>
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    
+    <h3>Reactions:</h3>
+    <ul>
+        <li>👍 Likes: {{ post.likes }}</li>
+        <li>👎 Dislikes: {{ post.dislikes }}</li>
+        <!-- Add more reactions as needed -->
+    </ul>
+    
+    <!-- Form to add reaction -->
+    <form action="{{ url_for('add_reaction', post_id=post.id) }}" method="post">
+        <button type="submit" name="reaction" value="like">👍 Like</button>
+        <button type="submit" name="reaction" value="dislike">👎 Dislike</button>
+        <!-- Add more buttons for other reactions -->
+    </form>
+    
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
