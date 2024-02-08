@@ -7,7 +7,7 @@
         <div class="post-content">
             {% if post.image_filename %}
                 <div class="image-container">
-                    <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="img-fluid rounded">
+                    <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="img-fluid rounded float-left" style="max-width: 200px; max-height: 200px; margin-right: 20px;">
                 </div>
             {% endif %}
             

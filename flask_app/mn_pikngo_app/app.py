@@ -17,9 +17,13 @@ app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Turn off Flask-SQLAlchemy event tracking
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  # Set the UPLOAD_FOLDER to static/uploads'path/to/your/upload/folder'
+app.config['GALLERY_UPLOAD_FOLDER'] = os.path.join('static', 'gallery_uploads')
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# Define allowed file types
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Dummy admin user (for demonstration purposes only)
 admin_user = {'username': 'admin', 'password': 'password'}
@@ -132,6 +136,44 @@ def edit_content(content_id):
         flash('Content not found', 'danger')
         return redirect(url_for('admin_dashboard'))
 
+# Function to check if the file extension is allowed
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Modify route to handle gallery image upload
+@app.route('/admin/upload_image', methods=['POST'])
+def upload_image():
+    if request.method == 'POST':
+        if 'gallery_uploads' not in request.files:
+            flash('No file part', 'error')
+            return redirect(request.url)
+        file = request.files['gallery_uploads']
+        if file.filename == '':
+            flash('No selected file', 'error')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            flash('File uploaded successfully', 'success')
+            return redirect(request.url)
+        else:
+            flash('Invalid file type', 'error')
+            return redirect(request.url)
+    else:
+        flash('Method not allowed', 'error')
+        return redirect(request.url)
+    
+
+@app.route('/admin/delete_image/<filename>', methods=['GET'])
+def delete_image(filename):
+    try:
+        os.remove(os.path.join(app.config['GALLERY_UPLOAD_FOLDER'], filename))
+        flash('Image deleted successfully', 'success')
+    except FileNotFoundError:
+        flash('Image not found', 'error')
+    return redirect(request.referrer)
+
 # Single post route
 @app.route('/post/<int:post_id>')
 def post(post_id):
@@ -153,6 +195,7 @@ def earlier_posts():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+
 
 """
 # Admin Signup Logic and form
