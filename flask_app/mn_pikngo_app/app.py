@@ -1,5 +1,6 @@
 # app.py
 
+from logging import DEBUG
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -187,9 +188,15 @@ def earlier_posts():
 
     return render_template('earlier_posts.html', posts=posts)
 
+HOST = 'localhost'  # Replace 'localhost' with the actual host value
+
+PORT = 5000  # Replace with the desired port number
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(debug=DEBUG, host=HOST, port=PORT)
+
+
 
 """
 # Admin Signup Logic and form
