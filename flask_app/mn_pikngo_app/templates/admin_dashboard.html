@@ -23,18 +23,8 @@
                 <label for="image">Upload Image:</label>
                 {{ form.image(class="form-control-file") }}
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary bg-success">Submit</button>
         </form>
-
-        <!-- Gallery Upload Form -->
-        <form method="post" action="{{ url_for('upload_image') }}" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="gallery_image">Upload Image to Gallery:</label>
-                <input type="file" name="file" class="form-control-file">
-            </div>
-            <button type="submit" class="btn btn-primary">Upload to Gallery</button>
-        </form>
-
 
         <!-- Display Existing Content -->
         <h2>Existing Content:</h2>
@@ -48,11 +38,10 @@
                     <p class="card-text">{{ content.body }}</p>
                     <div class="author-info">
                         <p>Posted by: {{ content.author }}</p>
-                    </div>
+                    </div><!-- /.author-info -->
+                    <!-- Delete and Edit Buttons 
+                     
                     
-                    {% if content.image_filename %}
-                        <img src="{{ url_for('static', filename='gallery_uploads/' + content.image_filename) }}" alt="Post Image" class="img-fluid float-right" style="max-width: 100px; max-height: 100px;">
-                    {% endif %}
                     <a href="{{ url_for('edit_content', content_id=content.id) }}" class="btn btn-warning">Edit</a>
                 </div>
             </div>
