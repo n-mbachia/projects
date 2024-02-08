@@ -21,6 +21,40 @@ app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  # Set the UPLOA
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    is_superuser = db.Column(db.Boolean, default=False)
+
+@app.route('/admin/register', methods=['GET', 'POST'])
+def register():
+    from werkzeug.security import generate_password_hash
+
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+
+        # Check if email already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email address already exists. Please use a different email.', 'error')
+            return redirect(url_for('register'))
+
+        hashed_password = generate_password_hash(password)
+
+        new_user = User(username=username, email=email, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('User registered successfully!', 'success')
+        return redirect(url_for('admin_login'))
+
+    return render_template('admin_register.html')
+
+
 # Dummy admin user (for demonstration purposes only)
 admin_user = {'username': 'admin', 'password': 'password'}
 
@@ -76,6 +110,8 @@ def admin_dashboard():
         image = form.image.data
         if image:
             filename = secure_filename(image.filename)
+            # Create the uploads directory if it doesn't exist
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
@@ -90,6 +126,7 @@ def admin_dashboard():
     contents = Content.query.all()
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
+
 
 # Index route
 @app.route('/')

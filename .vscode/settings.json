@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "pikngo",
+        "poolclass",
+        "pymysql",
+        "sqlalchemy",
+        "werkzeug"
+    ],
+    "python.analysis.extraPaths": [
+        "./flask_app"
+    ]
+}
