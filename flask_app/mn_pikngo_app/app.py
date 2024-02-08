@@ -14,6 +14,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Turn off Flask-SQLAlchemy event tracking
+# Accessing app.config
+# upload_folder = app.config.get('UPLOAD_FOLDER', 'flask_app/mn_pikngo_app/static/uploads')
+app.config['UPLOAD_FOLDER'] = 'flask_app/mn_pikngo_app/static/uploads'
+
+
 # app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  # Set the UPLOAD_FOLDER to static/uploads'path/to/your/upload/folder'
 # flask_app/mn_pikngo_app/static/uploads
 db = SQLAlchemy(app)
@@ -29,6 +34,7 @@ class User(db.Model):
 @app.route('/admin/register', methods=['GET', 'POST'])
 def register():
     from werkzeug.security import generate_password_hash
+    import os
     from forms import AdminSignupForm  # Import your WTForms AdminSignupForm
     
     form = AdminSignupForm()  # Create an instance of the form
@@ -66,6 +72,35 @@ class Content(db.Model):
     body = db.Column(db.Text, nullable=False)
     image_filename = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+# Image upload route
+
+UPLOAD_FOLDER = 'flask_app/mn_pikngo_app/static/uploads'
+
+@app.route('/upload_image', methods=['POST'])
+def upload_image():
+    if request.method == 'POST':
+        # Get the image file from the request
+        image_file = request.files['image']
+        if image_file:
+            # Get the filename
+            filename = secure_filename(image_file.filename)
+            
+            # Construct the file path
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            
+            # Check if the directory exists, create if not
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+            
+            # Save the image file
+            image_file.save(file_path)
+            
+            return 'Image uploaded successfully'
+    
+    return 'No image file provided'
+
 
 
 # Initialize the database
@@ -174,9 +209,10 @@ def edit_content(content_id):
 @app.route('/post/<int:post_id>')
 def post(post_id):
     post = Content.query.get(post_id)
+    content = post
 
     if post:
-        return render_template('post.html', post=post)
+        return render_template('post.html', post=post, content=content)
     else:
         flash('Post not found', 'danger')
         return redirect(url_for('index'))
@@ -197,7 +233,31 @@ if __name__ == '__main__':
     app.run(debug=DEBUG, host=HOST, port=PORT)
     app.app_context()
 
+# Route to delete a post
+UPLOAD_FOLDER = 'flask_app/mn_pikngo_app/static/uploads'
 
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    # Retrieve the post from the database
+    post = Content.query.get_or_404(post_id)
+
+    # Check if the post has an associated image file
+    if post.image_filename:
+        # Construct the path to the image file
+        image_path = os.path.join(UPLOAD_FOLDER, post.image_filename)
+        
+        # Check if the image file exists
+        if os.path.exists(image_path):
+            # Delete the image file
+            os.remove(image_path)
+
+    # Delete the post from the database
+    db.session.delete(post)
+    db.session.commit()
+
+    # Redirect to the admin dashboard with a success message
+    flash('Post deleted successfully', 'success')
+    return redirect(url_for('admin_dashboard'))
 
 """
 @app.route('/earlier_posts')
@@ -206,6 +266,8 @@ if __name__ == '__main__':
 @app.route('/')
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 @app.route('/admin/login', methods=['GET', 'POST'])
+@app.route('/post/<int:post_id>/delete', methods=['POST'])
+
 
 
 
