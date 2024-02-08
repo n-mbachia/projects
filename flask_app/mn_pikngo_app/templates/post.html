@@ -1,7 +1,7 @@
 <!-- templates/post.html -->
 
 {% extends 'base.html' %}
-
+{% include 'style.html' %}
 {% block content %}
     <div class="container">
         <div class="post-content">
@@ -10,6 +10,10 @@
                     <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="img-fluid rounded">
                 </div>
             {% endif %}
+            <div class="author-info">
+                <p>Posted by: {{ content.author }}</p>
+            </div>
+            
             
             <div class="post-text">
                 <h1>{{ post.title }}</h1>
