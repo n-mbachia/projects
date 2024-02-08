@@ -33,7 +33,7 @@ def index():
 @app.route('/<int:post_id>')
 def post(post_id):
     post = get_post(post_id)
-    return render_template('post.html', post=post)
+    return render_template('post.html', post=post, content = content)
 
 
 @app.route('/create', methods=('GET', 'POST'))
@@ -68,8 +68,8 @@ def edit(id):
         else:
             conn = get_db_connection()
             conn.execute('UPDATE posts SET title = ?, content = ?'
-                         ' WHERE id = ?',
-                         (title, content, id))
+                        ' WHERE id = ?',
+                        (title, content, id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
