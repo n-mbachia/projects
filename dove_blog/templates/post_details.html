@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in post.comments %}
+        <li>{{ comment.text }}</li>
+        {% endfor %}
+    </ul>
+    
+    <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
+        <label for="text">Add Comment:</label><br>
+        <textarea id="text" name="text" rows="4" cols="50"></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
