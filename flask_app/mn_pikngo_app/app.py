@@ -2,22 +2,19 @@
 
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed, FileSize
-from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 import secrets
 from flask_migrate import Migrate
+from forms import ContentForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Turn off Flask-SQLAlchemy event tracking
-app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  # Set the UPLOAD_FOLDER to static/uploads'path/to/your/upload/folder'
-
+# app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  # Set the UPLOAD_FOLDER to static/uploads'path/to/your/upload/folder'
+# flask_app/mn_pikngo_app/static/uploads
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -31,7 +28,10 @@ class User(db.Model):
 @app.route('/admin/register', methods=['GET', 'POST'])
 def register():
     from werkzeug.security import generate_password_hash
-
+    from forms import AdminSignupForm  # Import your WTForms AdminSignupForm
+    
+    form = AdminSignupForm()  # Create an instance of the form
+    
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
@@ -52,7 +52,7 @@ def register():
         flash('User registered successfully!', 'success')
         return redirect(url_for('admin_login'))
 
-    return render_template('admin_register.html')
+    return render_template('admin_register.html', form=form)  # Pass the form to the template context
 
 
 # Dummy admin user (for demonstration purposes only)
@@ -66,12 +66,6 @@ class Content(db.Model):
     image_filename = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Example Form for Content Creation
-class ContentForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    body = TextAreaField('Content', validators=[DataRequired()])
-    image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif']), FileSize(max_size=2 * 1024 * 1024)])  # 2 MB limit
-    submit = SubmitField('Submit')
 
 # Initialize the database
 def init_db():
@@ -95,6 +89,12 @@ def admin_login():
     return render_template('admin_login.html')
 
 # Admin dashboard route for content creation
+UPLOAD_FOLDER = 'flask_app/mn_pikngo_app/static/uploads'
+
+# Check if the uploads directory exists, if not, create it
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+    
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
     if not session.get('admin_logged_in'):
@@ -107,10 +107,13 @@ def admin_dashboard():
         body = form.body.data
         
         # Handle image upload
-        image = form.image.data
-        if image:
-            filename = secure_filename(image.filename)
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if 'image' in request.files:
+            image = request.files['image']
+            if image.filename != '':
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(UPLOAD_FOLDER, filename))
+            else:
+                filename = None
         else:
             filename = None
 
