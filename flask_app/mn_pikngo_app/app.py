@@ -259,6 +259,18 @@ def delete_post(post_id):
     flash('Post deleted successfully', 'success')
     return redirect(url_for('admin_dashboard'))
 
+
+from flask_login import logout_user
+
+@app.route('/admin_logout')
+def admin_logout():
+    # Log out the current user
+    logout_user()
+    # Redirect to the homepage or login page
+    
+    return redirect(url_for('index'))  # Assuming 'index' is the endpoint for your homepage
+
+
 """
 @app.route('/earlier_posts')
 @app.route('/post/<int:post_id>')
@@ -267,8 +279,7 @@ def delete_post(post_id):
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 @app.route('/admin/login', methods=['GET', 'POST'])
 @app.route('/post/<int:post_id>/delete', methods=['POST'])
-
-
+@app.route('/logout')
 
 
 """
