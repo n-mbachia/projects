@@ -17,6 +17,7 @@
                     <li class="list-unstyled">
                         <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
                         <span class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                        
                     </li>
                 {% endfor %}
             </ul>
