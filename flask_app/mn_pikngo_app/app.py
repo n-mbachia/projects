@@ -110,8 +110,6 @@ def admin_dashboard():
         image = form.image.data
         if image:
             filename = secure_filename(image.filename)
-            # Create the uploads directory if it doesn't exist
-            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
@@ -126,7 +124,6 @@ def admin_dashboard():
     contents = Content.query.all()
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
-
 
 # Index route
 @app.route('/')
