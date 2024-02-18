@@ -2,7 +2,7 @@
 
 ## Pick 'n Go Project
 
-This is a project focused on building a simple blog for the Pik 'n Go brand system, using Flask on version 1.0 and then build a version 1.2 on Django. The project is starting with a simple blog post to enhance content creation while focusing to build an entire ecommerce site where clients can place their orders online for delivery while also requesting other services that will be offered. 
+This is a project focused on building a landing page website and blog post for the Pik 'n Go brand name owned and operated by mN capital, using built on Flask for version 1.0 and then will be migrated to a full e-commerce site on version 2.0 Django. The project is starting with a simple blog post to enhance content creation while focusing to build an entire ecommerce site where clients can place their orders online for delivery while also requesting other services that will be offered. 
 
 ## Table of Contents
 

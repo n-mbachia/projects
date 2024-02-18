@@ -1,8 +1,8 @@
 /* style.css */
 @font-face {
     font-family: 'BerkshireSwash';
-    src: url('../fonts/BerkshireSwash-Regular.woff2') format('woff2'),
-         url('../fonts/BerkshireSwash-Regular.woff') format('woff');
+    src: url('flask_app/mn_pikngo_app/static/fonts/berkshireswash/BerkshireSwash-Regular.ttf') format('woff2'),
+         url('flask_app/mn_pikngo_app/static/fonts/berkshireswash/BerkshireSwash-Regular.ttf') format('woff');
     font-weight: normal;
     font-style: normal;
 }
