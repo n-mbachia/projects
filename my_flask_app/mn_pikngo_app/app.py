@@ -31,7 +31,7 @@ class User(db.Model):
 @app.route('/admin/register', methods=['GET', 'POST'])
 def register():
     from werkzeug.security import generate_password_hash
-
+    
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
@@ -54,10 +54,6 @@ def register():
 
     return render_template('admin_register.html')
 
-
-# Dummy admin user (for demonstration purposes only)
-admin_user = {'username': 'admin', 'password': 'password'}
-
 # Content model
 class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -70,7 +66,7 @@ class Content(db.Model):
 class ContentForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     body = TextAreaField('Content', validators=[DataRequired()])
-    image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif']), FileSize(max_size=2 * 1024 * 1024)])  # 2 MB limit
+    image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif', 'webp']), FileSize(max_size=2 * 1024 * 1024)])  # 2 MB limit
     submit = SubmitField('Submit')
 
 # Initialize the database
@@ -79,13 +75,16 @@ def init_db():
         db.create_all()
 
 # Admin login route
+from werkzeug.security import check_password_hash
+
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['email']
         password = request.form['password']
         
-        if username == admin_user['username'] and password == admin_user['password']:
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
             session['admin_logged_in'] = True
             flash('Logged in successfully', 'success')
             return redirect(url_for('admin_dashboard'))
@@ -126,7 +125,6 @@ def admin_dashboard():
     contents = Content.query.all()
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
-
 
 # Index route
 @app.route('/')
@@ -187,6 +185,19 @@ def earlier_posts():
 
     return render_template('earlier_posts.html', posts=posts)
 
+# Post deletion
+@app.route('/admin/delete_content/<int:content_id>', methods=['POST'])
+def delete_content(content_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+
+    content = Content.query.get_or_404(content_id)
+    db.session.delete(content)
+    db.session.commit()
+    flash('Post deleted successfully', 'success')
+    return redirect(url_for('admin_dashboard'))
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+    
