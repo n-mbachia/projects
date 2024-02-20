@@ -27,3 +27,4 @@ class ContentForm(FlaskForm):
     body = TextAreaField('Content', validators=[DataRequired()])
     image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif']), FileSize(max_size=2 * 1024 * 1024)])  # 2 MB limit
     submit = SubmitField('Submit')
+    author = StringField('Author')

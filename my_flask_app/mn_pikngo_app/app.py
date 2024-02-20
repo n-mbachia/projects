@@ -4,9 +4,9 @@ from logging import DEBUG
 import os
 import secrets
 from datetime import datetime
-
-from flask import Flask, render_template, redirect, url_for, request, session, flash
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, url_for, request, session, flash, send_file
+from flask_sqlalchemy import SQLAlchemy 
+from sqlalchemy import Column, String
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'flask_app/mn_pikngo_app/static/uploads'
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -37,7 +37,8 @@ class Content(db.Model):
     body = db.Column(db.Text, nullable=False)
     image_filename = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
+    # author = Column(String(100), nullable=False, default='')
+                       
 # Initialize the database
 def init_db():
     with app.app_context():
@@ -84,12 +85,6 @@ def admin_login():
 
     return render_template('admin_login.html')
 
-# Route for admin logout
-@app.route('/admin/logout')
-def admin_logout():
-    logout_user()
-    return redirect(url_for('index'))
-
 # Route for admin dashboard
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
@@ -101,6 +96,7 @@ def admin_dashboard():
     if form.validate_on_submit():
         title = form.title.data
         body = form.body.data
+        # author = form.author.data  # Add this line to get author information from the form
         
         if 'image' in request.files:
             image = request.files['image']
@@ -112,7 +108,7 @@ def admin_dashboard():
         else:
             filename = None
 
-        new_content = Content(title=title, body=body, image_filename=filename)
+        new_content = Content(title=title, body=body, image_filename=filename)  # Include author information when creating new content
         db.session.add(new_content)
         db.session.commit()
 
@@ -122,6 +118,7 @@ def admin_dashboard():
     contents = Content.query.all()
 
     return render_template('admin_dashboard.html', form=form, contents=contents)
+
 
 # Route for editing content
 @app.route('/admin/edit_content/<int:content_id>', methods=['GET', 'POST'])
@@ -183,9 +180,20 @@ def delete_post(post_id):
 # Route for displaying the homepage
 @app.route('/')
 def index():
-    latest_posts = Content.query.order_by(Content.created_at.desc()).limit(2).all()
-    older_posts = Content.query.order_by(Content.created_at.desc()).offset(2).all()
-    return render_template('index.html', latest_posts=latest_posts, older_posts=older_posts)
+    # latest_posts = Content.query.order_by(Content.created_at.desc()).limit(2).all()
+    # older_posts = Content.query.order_by(Content.created_at.desc()).offset(2).all()
+    return render_template('index.html') # latest_posts=latest_posts, older_posts=older_posts)
+
+from flask import send_file
+
+@app.route('/menu')
+def download_menu():
+    # Assuming your PDF menu file is located in the static folder
+    menu_path = 'static/pikngo_menu.pdf'
+    # Provide a filename for the downloaded file (optional)
+    filename = 'pikngo_menu.pdf'
+    # Send the file to the user for download
+    return send_file(menu_path, as_attachment=True)
 
 # Route for displaying a single post
 @app.route('/post/<int:post_id>')
@@ -206,7 +214,6 @@ def earlier_posts():
 if __name__ == '__main__':
     init_db()
     app.run(debug=DEBUG, host='localhost', port=5000)
-
 
 """
 @app.route('/admin/register', methods=['GET', 'POST'])
