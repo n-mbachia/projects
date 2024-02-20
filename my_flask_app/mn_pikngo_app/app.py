@@ -4,9 +4,9 @@ from logging import DEBUG
 import os
 import secrets
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for, request, session, flash, send_file
-from flask_sqlalchemy import SQLAlchemy 
-from sqlalchemy import Column, String
+
+from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
