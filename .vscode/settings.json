@@ -3,5 +3,6 @@
         "pikngo",
         "sqlalchemy",
         "werkzeug"
-    ]
+    ],
+    "python.pythonPath": ".venv/bin/python3.11"
 }
