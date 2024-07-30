@@ -4,5 +4,8 @@
         "sqlalchemy",
         "werkzeug"
     ],
-    "python.pythonPath": ".venv/bin/python3.11"
+    "python.pythonPath": ".venv/bin/python3.11",
+    "python.analysis.extraPaths": [
+        "./my_flask_app/mn_pikngo_"
+    ]
 }
