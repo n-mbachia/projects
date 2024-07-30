@@ -1,26 +1,54 @@
-<!-- templates/edit_content.html -->
+<!-- templates/new_content.html -->
 
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <h1>Edit Content</h1>
-        <!-- Display flash messages here if needed -->
+    <div class="container mt-5">
+        <h1>Create New Content</h1>
+        
+        <!-- Display flash messages if needed -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- New Content Form -->
         <form method="POST" enctype="multipart/form-data">
-            {{ form.csrf_token }}
-            <div class="form-group">
-                {{ form.title.label }}
+            {{ form.hidden_tag() }}
+
+            <div class="form-group mb-3">
+                {{ form.title.label(class="form-label") }}
                 {{ form.title(class="form-control") }}
+                {% for error in form.title.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
             </div>
-            <div class="form-group">
-                {{ form.body.label }}
+
+            <div class="form-group mb-3">
+                {{ form.body.label(class="form-label") }}
                 {{ form.body(class="form-control") }}
+                {% for error in form.body.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
             </div>
-            <div class="form-group">
-                {{ form.image.label }}
+
+            <div class="form-group mb-3">
+                {{ form.image.label(class="form-label") }}
                 {{ form.image(class="form-control-file") }}
+                {% for error in form.image.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+
+            <button type="submit" class="btn btn-primary">Create Content</button>
         </form>
     </div>
 {% endblock %}
