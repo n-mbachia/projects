@@ -11,10 +11,24 @@
     <p>{{ post.body }}</p>
 </div>
 
-<div>
+<div class="container text-center mt-4">
     <button onclick="scrollToTop()" id="scrollToTopBtn" style="display: none; background-color: {{ post.created_at.strftime('#%m%d%H%M') }}; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Return Home</button>
 </div>
+
 <script>
-    //scroll to top JavaScript remains unchanged)
+    // JavaScript to handle scroll-to-top button
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show or hide the scroll-to-top button based on scroll position
+    window.onscroll = function() {
+        const button = document.getElementById('scrollToTopBtn');
+        if (window.scrollY > 100) {
+            button.style.display = 'block';
+        } else {
+            button.style.display = 'none';
+        }
+    };
 </script>
 {% endblock %}
