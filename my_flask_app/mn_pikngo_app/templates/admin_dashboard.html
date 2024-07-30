@@ -1,54 +1,42 @@
-<!-- templates/admin_dashboard.html -->
-
 {% extends 'base.html' %}
 
 {% block title %}
-    Admin Dashboard - My Flask App
+    Pik'nGo | Admin Dashboard
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>Admin Dashboard</h1>
+<div class="container mt-5">
+    <h1>Admin Dashboard</h1>
 
-        <!-- Content Form -->
-        <form method="post" action="{{ url_for('admin_dashboard') }}" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                <label for="title">Title:</label>
-                {{ form.title(class="form-control") }}
-            </div>
-            <div class="form-group">
-                <label for="body">Content:</label>
-                {{ form.body(class="form-control") }}
-            </div>
-            <div class="form-group">
-                <label for="image">Upload Image:</label>
-                {{ form.image(class="form-control-file") }}
-            </div>
-            <button type="submit" class="btn btn-primary bg-success">Submit</button>
-        </form>
-
-        <!-- Display Existing Content -->
-        <h2>Existing Content:</h2>
-        {% for content in contents %}
-            <div class="card">
-                <div class="card-body">
+    <!-- Display Existing Content -->
+    <div class="container-fluid">
+        <h2 class="mt-5">Latest Articles:</h2>
+        <div class="row">
+            {% for content in contents %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card">
                     {% if content.image_filename %}
-                        <img src="{{ url_for('static', filename='uploads/' + content.image_filename) }}" alt="Post Image" class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                    <img src="{{ url_for('mn_pikngo_app.media', filename=content.image_filename) }}" alt="Post Image"
+                        class="card-img-top img-fluid" style="max-width: 100px; max-height: 100px;">
                     {% endif %}
-                    <h3 class="card-title">{{ content.title }}</h3>
-                    <p class="card-text">{{ content.body }}</p>
-                    <div class="author-info">
-                        <!-- p>Posted by: {{ content.author }}</p -->
-                    </div><!-- /.author-info -->
-                    <!-- Delete and Edit Buttons -->
-                    <a href="{{ url_for('edit_content', content_id=content.id) }}" class="btn btn-warning">Edit</a>
-                    <form method="post" action="{{ url_for('delete_content', content_id=content.id) }}" style="display: inline;">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
-                    </form>                    
+                    <div class="card-body">
+                        <h3 class="card-title">{{ content.title }}</h3>
+                        {% set excerpt = content.body.split(' ', 50) | join(' ') %}
+                        <p class="card-text">{{ excerpt }}{% if content.body|length > excerpt|length %}...{% endif %}</p>
+                        <div class="d-flex justify-content-between">
+                            <!-- Edit Button -->
+                            <a href="{{ url_for('mn_pikngo_app.edit_content', content_id=content.id) }}" class="btn btn-warning">Edit</a>
+
+                            <!-- Delete Button -->
+                            <form method="post" action="{{ url_for('mn_pikngo_app.delete_content', content_id=content.id) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <br>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
+</div>
 {% endblock %}
