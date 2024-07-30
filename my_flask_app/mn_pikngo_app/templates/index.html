@@ -5,13 +5,14 @@
 {% block content %}
     <div class="container">
         <div class="row justify-content-center align-items-center">
-            <div class="static rounded text-center">
-                <img src="{{ url_for('static', filename='landing_page.jpg') }}" alt="Image Caption" class="rounded img-fluid">
+            <div class="col-md-8 text-center mb-4">
+                <img src="{{ url_for('static', filename='landing_page.jpg') }}" alt="Landing Page Image" class="img-fluid rounded">
             </div>
         </div>
-        <div class="container text-center mt-3">
+        <div class="text-center mt-4">
             <h1>About Us</h1>
-            <ul>
+            <ul class="list-unstyled">
+                <!-- Add list items here -->
             </ul>
         </div>
     </div>
