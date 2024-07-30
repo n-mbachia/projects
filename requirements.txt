@@ -15,7 +15,7 @@ MarkupSafe==2.1.4
 mysql-connector-python==8.3.0
 packaging==23.2
 pluggy==1.4.0
-PyMySQL==1.1.0
+PyMySQL==1.1.1
 pytest==8.0.0
 SQLAlchemy==2.0.25
 typing_extensions==4.9.0
