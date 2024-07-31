@@ -222,6 +222,8 @@ def edit_content(content_id):
     else:
         flash("Content not found", "danger")
         return redirect(url_for("mn_pikngo_app.admin_dashboard"))
+
+
 @blueprint.route("/admin/delete_content/<int:content_id>", methods=["POST"])
 def delete_content(content_id):
     if not session.get("admin_logged_in"):
@@ -398,3 +400,11 @@ def set_new_password(token):
     return render_template(
         "new_password.html", form=form
     )  # Render a template for setting new password
+
+
+"""
+    export FLASK_APP=my_flask_app/mn_pikngo_app/app.py
+export FLASK_ENV=development
+export SECRET_KEY=your_secret_key
+export DATABASE_URL=your_database_url
+"""
