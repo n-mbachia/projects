@@ -3,8 +3,8 @@ from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 from flask_ckeditor import CKEditor
-from mn_pikngo_app.models import db, User
-from mn_pikngo_app.blueprint import blueprint
+from models import db, User
+from blueprint import blueprint
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
