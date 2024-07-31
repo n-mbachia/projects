@@ -33,36 +33,54 @@
         <!-- Collapsible content -->
         <div class="collapse navbar-collapse font-weight-bold px-4" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mn_pikngo_app.create_post') }}">New Post</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mn_pikngo_app.download_menu') }}">Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mn_pikngo_app.earlier_posts') }}">Blog</a>
-                </li>
-                <!-- Contact -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mn_pikngo_app.contact') }}">Contact</a>
-                </li>
-                <!-- Admin Dashboard -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('mn_pikngo_app.admin_dashboard') }}">Admin</a>
-                </li>
                 {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.create_post') }}">New Post</a>
+                    </li>
+                    
+                    <!-- Blog -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.earlier_posts') }}">Blog</a>
+                    </li>
+
+                    <!-- Admin Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.admin_dashboard') }}">Admin</a>
+                    </li>
+
+                    <!-- Contact -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.contact') }}">Contact</a>
+                    </li>
+
+                    <!-- Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.download_menu') }}">Menu</a>
+                    </li>
+
                     <!-- Logout -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('mn_pikngo_app.admin_logout') }}">Logout</a>
                     </li>
                 {% else %}
+                    <!-- Blog -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.earlier_posts') }}">Blog</a>
+                    </li>
+
                     <!-- Register -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('mn_pikngo_app.admin_register') }}">Register</a>
                     </li>
+
                     <!-- Login -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('mn_pikngo_app.admin_login') }}">Login</a>
+                    </li>
+                    
+                    <!-- Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mn_pikngo_app.download_menu') }}">Menu</a>
                     </li>
 
                 {% endif %}
