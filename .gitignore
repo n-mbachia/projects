@@ -4,3 +4,5 @@ flask_app/mn_pikngo_app/__pycache__/app.cpython-311.pyc
 my_flask_app/mn_pikngo_app/media/uploads/*
 instance/*
 *.db
+env/*
+.venv/*
