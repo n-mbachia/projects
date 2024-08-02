@@ -5,10 +5,17 @@ from flask_wtf.csrf import CSRFProtect
 from flask_ckeditor import CKEditor
 from models import db, User
 from blueprint import blueprint
+from dotenv import load_dotenv
+
+
+# Load enviroment variabbles from .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
-app.config['SECRET_KEY'] = 'ae029fda8be2694c92b0c226e240669b5621a4b1fb47873d0bdd29070c2b18d45c0427aea11c19ca3fb21cc4ac2031d37aabd575536d117c8b23235c51f0bbbf'
+
+# Configaration
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///your_database.db')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_default_secret_key')
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'media/uploads')
 app.config['CKEDITOR_SERVE_LOCAL'] = True
 
