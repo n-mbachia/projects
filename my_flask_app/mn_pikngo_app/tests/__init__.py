@@ -1,1 +1,1 @@
-# mn_pikngo_app/__init__.py
+# mn_pikngo_app/tests/__init__.py
